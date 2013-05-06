@@ -18,7 +18,7 @@ TO-DO
    e.g. John Smith becomes JohnSmith...therefore if we have two users logging in as JohnSmith, the username is not unique. 
 5. No function for existing users to ADD a social login to their account yet.
 6. There's no admin page - hybridauth_settings.php is pretty much none functioning, started copying the rpx_settings.php
-
+7. CHange hybridauth_authentication.php so that it accesses the database using hotaru connection
 
 Instructions
 -------------
