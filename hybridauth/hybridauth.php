@@ -276,7 +276,7 @@ class Hybridauth
             
             $db= $authenticate->connectdb();
              #1 Check if user is already authenticated using the chosen provider (e.g. facebook)
-             $authentication_info= $authenticate->find_by_provider_uid($db, $provider, $user_profile->identifier);
+             $authentication_info= $authenticate->find_by_provider_uid($h, $provider, $user_profile->identifier);
             
              # 2 - if authentication exists in the database, then we set the user as connected and redirect him to his profile page
                  if( $authentication_info ){
@@ -340,9 +340,9 @@ class Hybridauth
             $authenticate= new authentication();//create the data access object
       
             
-            $db= $authenticate->connectdb();
+            //$db= $authenticate->connectdb();
              #1 Check if user is already authenticated using the chosen provider (e.g. facebook)
-             $authentication_info= $authenticate->find_by_provider_uid($db, $provider, $user_profile->identifier);
+             $authentication_info= $authenticate->find_by_provider_uid($h, $provider, $user_profile->identifier);
             
              # 2 - if authentication exists in the database, then we set the user as connected and redirect him to his profile page
                   if( $authentication_info ){
@@ -369,7 +369,7 @@ class Hybridauth
 			// then we tell the user that the email  is already in use 
 			// but, its up to you if you want to associate the authentication with the user having the adresse email in the database
 			if( $user_profile->email ){
-				$user_info = $authenticate->find_by_email($db,  $user_profile->email );
+				$user_info = $authenticate->find_by_email($h,  $user_profile->email );
 
 				if( $user_info ) {
 					die( '<br /><b style="color:red">Well! the email returned by the provider ('. $user_profile->email .') already exist in our database, so in this case you might use the <a href="index.php">Sign-in</a> to login using your email and password.</b>' );
@@ -400,7 +400,7 @@ class Hybridauth
 
                         $preferredname= str_replace (" ", "", $display_name); 
 			// 4.1 - create new user
-			$new_user_id = $authenticate->createUser($db, 
+			$new_user_id = $authenticate->createUser($h, 
                                 $provider_uid,
                                 $provider,
                                 $first_name,
@@ -426,7 +426,7 @@ class Hybridauth
                         // 4.3 - store the new user_id in session
 						
 					 #1 Check if user is already authenticated using the chosen provider (e.g. facebook)
-             $authentication_info= $authenticate->find_by_provider_uid($db, $provider, $user_profile->identifier);	
+             $authentication_info= $authenticate->find_by_provider_uid($h, $provider, $user_profile->identifier);	
 		  # 2 - if authentication exists in the database, then we set the user as connected and redirect him to his profile page
                   if( $authentication_info ){
                      

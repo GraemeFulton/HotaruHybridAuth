@@ -24,7 +24,7 @@
  * @link      http://www.hotarucms.org/
  */
  
-class HybridAuth
+class HybridauthSettings
 {
      /**
      * Admin settings for the Users plugin
