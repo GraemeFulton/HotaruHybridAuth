@@ -3,31 +3,44 @@
 
 class authentication { 
 
-    function connectdb(){
-     $db = new PDO('');//insert database details e.g  $db = new PDO('mysql:host=localhost;dbname=nameofdb;', 'username', 'password');
-    
-    return($db);
-    }
+//    function connectdb(){
+//     $db = new PDO('');//insert database details e.g  $db = new PDO('mysql:host=localhost;dbname=nameofdb;', 'username', 'password');
+//    
+//    return($db);
+//    }
 	 
 		
-	function find_by_provider_uid($db, $provider, $provider_uid){
-        $stmt = $db->query("SELECT * FROM hotaru_users WHERE user_hybridauth_provider='$provider' AND user_hybridauth_id='$provider_uid'");
-
-	return $stmt->fetchAll();       
-	}
+    /*
+     * @param type $h
+     * @param type $provider
+     * @param type $provider_uid
+     * @return type 
+     */
+    function find_by_provider_uid($h, $provider, $provider_uid){
+        $sql = "SELECT * FROM " . TABLE_USERS . " WHERE user_hybridauth_provider=%s AND user_hybridauth_id=%s";
+        $query = $h->db->prepare($sql, $provider, $provider_uid);
+                
+	return $parents = $h->db->get_results($query);      
+    }
         
-          #3 - check for matching email
-    function find_by_email( $db, $email ){
+    /**
+     * check for matching email
+     * @param type $h
+     * @param type $db
+     * @param type $email
+     * @return type
+     */
+    function find_by_email($h, $email ){
         
-        $stmt = $db->query("SELECT * FROM hotaru_users WHERE user_email = '$email' LIMIT 1");
-        
-	return $stmt->fetchAll();       
-
+        $sql = "SELECT * FROM " . TABLE_USERS . " WHERE user_email=%s LIMIT 1";
+        $query = $h->db->prepare($sql, $email);
+                
+	return $parents = $h->db->get_results($query);;       
     }
 	
 	
 	   
-    function createUser($db,
+    function createUser($h,
                $provider_uid,
                $provider,
                $first_name,
@@ -49,57 +62,60 @@ class authentication {
                $zip,
                $password
             ){ 
+		
+            // set password
+            $p= md5($password);
 			
-$p= md5($password);
-			
-		$stmt = $db->query("INSERT INTO hotaru_users (
-					user_username,
-                    user_hybridauth_id,
-                    user_hybridauth_provider,
-                    user_hybridauth_fname,
-                    user_hybridauth_lname,
-                    user_email,
-                    user_hybridauth_dname,
-                    user_hybridauth_url,
-                    user_hybridauth_profileurl,
-                    user_hybridauth_photo,
-                    user_hybridauth_desc,
-                    user_hybridauth_bday,
-                    user_hybridauth_country,
-                    user_hybridauth_region,
-                    user_hybridauth_city,
-                    user_hybridauth_tel,
-                    user_hybridauth_gender,
-                    user_hybridauth_birthyear,
-                    user_hybridauth_birthmonth,
-                    user_hybridauth_zip,
-                    user_password
-                   ) 
-                   VALUES ( 
-				   '$display_name',
-                   '$provider_uid',
-                   '$provider',
-                   '$first_name', 
-                    '$last_name', 
-                    '$email', 
-                    '$display_name', 
-                    '$website_url', 
-                    '$profile_url', 
-                    '$photo_url', 
-                    '$description', 
-                    '$birthday', 
-                    '$country', 
-                    '$region', 
-                    '$city', 
-                    '$phone', 
-                    '$gender', 
-                    '$birthyear', 
-                    '$birthmonth', 
-                    '$zip', 
-                    '$password'
-                       ) ");
+            $sql = "INSERT INTO " . TABLE_USERS . " (   user_username,
+                                                        user_hybridauth_id,
+                                                        user_hybridauth_provider,
+                                                        user_hybridauth_fname,
+                                                        user_hybridauth_lname,
+                                                        user_email,
+                                                        user_hybridauth_dname,
+                                                        user_hybridauth_url,
+                                                        user_hybridauth_profileurl,
+                                                        user_hybridauth_photo,
+                                                        user_hybridauth_desc,
+                                                        user_hybridauth_bday,
+                                                        user_hybridauth_country,
+                                                        user_hybridauth_region,
+                                                        user_hybridauth_city,
+                                                        user_hybridauth_tel,
+                                                        user_hybridauth_gender,
+                                                        user_hybridauth_birthyear,
+                                                        user_hybridauth_birthmonth,
+                                                        user_hybridauth_zip,
+                                                        user_password
+                                                    ) VALUES (%s, %s, %s, %d)";
+            $h->db->query($h->db->prepare($sql, $display_name,
+                                                $provider_uid,
+                                                $provider,
+                                                $first_name,
+                                                $last_name,
+                                                $email,
+                                                $display_name, 
+                                                $website_url, 
+                                                $profile_url, 
+                                                $photo_url, 
+                                                $description, 
+                                                $birthday, 
+                                                $country, 
+                                                $region, 
+                                                $city, 
+                                                $phone, 
+                                                $gender, 
+                                                $birthyear, 
+                                                $birthmonth, 
+                                                $zip, 
+                                                $password
+                                        ));
+            
+                $h->messages['User Created'] = "green";
 
-		return $db->lastInsertId();
+                $last_insert_id = $h->db->get_var($h->db->prepare("SELECT LAST_INSERT_ID()"));
+                
+		return $last_insert_id;
 	}
 	
 	
