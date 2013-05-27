@@ -2,13 +2,19 @@
 
 
 class authentication { 
-
-//    function connectdb(){
-//     $db = new PDO('');//insert database details e.g  $db = new PDO('mysql:host=localhost;dbname=nameofdb;', 'username', 'password');
-//    
-//    return($db);
-//    }
-	 
+		
+		
+	/*
+     * @param type $h
+     * @return type: true/false
+     */	
+	public function social_check($h){
+	 $sql = "SELECT user_id, user_hybridauth_provider FROM " . TABLE_USERS . " WHERE user_id = %s";
+            $result = $h->db->get_row($h->db->prepare($sql, $h->currentUser->id));
+	 if ($result->user_hybridauth_provider) {return true;}
+	 else{return false;}
+	}
+		
 		
     /*
      * @param type $h
@@ -22,7 +28,22 @@ class authentication {
                 
 	return $parents = $h->db->get_results($query);      
     }
+	
+	 /*
+     * @param type $h
+     * @param type $username
+     * @return type 
+     */
+    function check_username($h, $username){
+        $sql = "SELECT user_username FROM " . TABLE_USERS . " WHERE user_username=%s";
+        $query = $h->db->prepare($sql, $username);
         
+		return $uname = $h->db->get_results($query);	
+    }
+	
+	
+	
+	    
     /**
      * check for matching email
      * @param type $h
@@ -37,11 +58,61 @@ class authentication {
                 
 	return $parents = $h->db->get_results($query);;       
     }
+
+
+    /**
+     * check for user id
+     * @param type $h
+     * @param type $db
+     * @param type $email
+     * @return type
+     */
+    function get_user_id_by_provider_uid($h, $provider_uid ){
+        
+        $sql = "SELECT user_id FROM " . TABLE_USERS . " WHERE user_hybridauth_id =%s ";
+        $query = $h->db->prepare($sql, $provider_uid);
+                
+	return $userId = $h->db->get_var($query);;       
+    }
 	
+	
+	
+	 /**
+     * check for username from identification number
+     * @param type $h
+     * @param type $db
+     * @param type $email
+     * @return type
+     */
+    function get_username_by_provider_uid($h, $provider_uid ){
+        
+        $sql = "SELECT user_username FROM " . TABLE_USERS . " WHERE user_hybridauth_id =%s ";
+        $query = $h->db->prepare($sql, $provider_uid);
+                
+	return $userId = $h->db->get_var($query);;       
+    }
+
+
+	
+	 /**
+     * get username by email
+     * @param type $h
+     * @param type $db
+     * @param type $email
+     * @return type
+     */
+	 function get_username_by_email($h, $email){
+        
+        $sql = "SELECT user_username FROM " . TABLE_USERS . " WHERE user_email=%s LIMIT 1";
+        $query = $h->db->prepare($sql, $email);
+                
+	return $username= $h->db->get_var($query);
+    }
 	
 	   
     function createUser($h,
-               $provider_uid,
+               $preferredname,
+			   $provider_uid,
                $provider,
                $first_name,
                $last_name,
@@ -60,10 +131,13 @@ class authentication {
                $birthyear,
                $birthmonth,
                $zip,
-               $password
+               $password,
+			   $hotaru_display_name,
+			   $userip,
+			   $permissions
             ){ 
 		
-            // set password
+       	
             $p= md5($password);
 			
             $sql = "INSERT INTO " . TABLE_USERS . " (   user_username,
@@ -86,9 +160,13 @@ class authentication {
                                                         user_hybridauth_birthyear,
                                                         user_hybridauth_birthmonth,
                                                         user_hybridauth_zip,
-                                                        user_password
-                                                    ) VALUES (%s, %s, %s, %d)";
-            $h->db->query($h->db->prepare($sql, $display_name,
+                                                        user_password,
+														user_hotaru_display_name,
+														user_ip,
+														user_permissions,
+														user_date
+                                                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP)";
+            $h->db->query($h->db->prepare($sql, $preferredname,
                                                 $provider_uid,
                                                 $provider,
                                                 $first_name,
@@ -108,11 +186,14 @@ class authentication {
                                                 $birthyear, 
                                                 $birthmonth, 
                                                 $zip, 
-                                                $password
+                                                $password,
+												$hotaru_display_name,
+												$userip,
+												serialize($permissions)
                                         ));
             
                 $h->messages['User Created'] = "green";
-
+				
                 $last_insert_id = $h->db->get_var($h->db->prepare("SELECT LAST_INSERT_ID()"));
                 
 		return $last_insert_id;

@@ -41,12 +41,14 @@ class Hybridauth
 	   
 	   //copied these from RPX plugin, don't think I use any of them
 
-    protected $apiKey       = "";
+ 
     protected $provider  = "";
-    protected $tokenUrl     = "";
+    protected $prefname       = "";
+	protected $tokenUrl     = "";
     protected $language     = "en";
     protected $account       = "basic";
     protected $display       = "embed";
+
 
     /**
      * Build an object containing $db and $cage ---ok
@@ -85,51 +87,51 @@ class Hybridauth
 	
         if (!$h->db->column_exists('users', 'user_hybridauth_id')) {
             // add new user_hybridauth_id field
-            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_id VARCHAR(255) NULL AFTER user_date";
+            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_id VARCHAR(128) AFTER user_date";
             $h->db->query($h->db->prepare($sql));
         }
         
         if (!$h->db->column_exists('users', 'user_hybridauth_provider')) {
             // add new user_hybridauth_provider field
-            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_provider TEXT NULL AFTER user_hybridauth_id";
+            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_provider VARCHAR(128) AFTER user_hybridauth_id";
             $h->db->query($h->db->prepare($sql));
         }
 		
 		       //fname
           if (!$h->db->column_exists('users', 'user_hybridauth_fname')) {
             // add new user_hybridauth_provider field
-            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_fname TEXT NULL AFTER user_hybridauth_id";
+            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_fname VARCHAR(128) AFTER user_hybridauth_id";
             $h->db->query($h->db->prepare($sql));
         }
         
         //lastname
          if (!$h->db->column_exists('users', 'user_hybridauth_lname')) {
             // add new user_hybridauth_provider field
-            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_lname TEXT NULL AFTER user_hybridauth_id";
+            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_lname VARCHAR(128) AFTER user_hybridauth_id";
             $h->db->query($h->db->prepare($sql));
         }
        //displayname
          if (!$h->db->column_exists('users', 'user_hybridauth_dname')) {
             // add new user_hybridauth_provider field
-            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_dname TEXT NULL AFTER user_hybridauth_id";
+            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_dname VARCHAR(128) AFTER user_hybridauth_id";
             $h->db->query($h->db->prepare($sql));
         }
         //websiteurl
          if (!$h->db->column_exists('users', 'user_hybridauth_url')) {
             // add new user_hybridauth_provider field
-            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_url TEXT NULL AFTER user_hybridauth_id";
+            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_url VARCHAR(128) AFTER user_hybridauth_id";
             $h->db->query($h->db->prepare($sql));
         }
          //profileurl
          if (!$h->db->column_exists('users', 'user_hybridauth_profileurl')) {
             // add new user_hybridauth_provider field
-            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_profileurl TEXT NULL AFTER user_hybridauth_id";
+            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_profileurl VARCHAR(128) AFTER user_hybridauth_id";
             $h->db->query($h->db->prepare($sql));
         }
         //photoURL
          if (!$h->db->column_exists('users', 'user_hybridauth_photo')) {
             // add new user_hybridauth_provider field
-            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_photo TEXT NULL AFTER user_hybridauth_id";
+            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_photo VARCHAR(128) AFTER user_hybridauth_id";
             $h->db->query($h->db->prepare($sql));
         }
         
@@ -143,57 +145,57 @@ class Hybridauth
         //bday
          if (!$h->db->column_exists('users', 'user_hybridauth_bday')) {
             // add new user_hybridauth_provider field
-            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_bday TEXT NULL AFTER user_hybridauth_id";
+            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_bday VARCHAR(128) AFTER user_hybridauth_id";
             $h->db->query($h->db->prepare($sql));
         }
         
         //country
          if (!$h->db->column_exists('users', 'user_hybridauth_country')) {
             // add new user_hybridauth_provider field
-            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_country TEXT NULL AFTER user_hybridauth_id";
+            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_country VARCHAR(128) AFTER user_hybridauth_id";
             $h->db->query($h->db->prepare($sql));
         }
         //region
          if (!$h->db->column_exists('users', 'user_hybridauth_region')) {
             // add new user_hybridauth_provider field
-            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_region TEXT NULL AFTER user_hybridauth_id";
+            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_region VARCHAR(128) AFTER user_hybridauth_id";
             $h->db->query($h->db->prepare($sql));
         }
         //city
          if (!$h->db->column_exists('users', 'user_hybridauth_city')) {
             // add new user_hybridauth_provider field
-            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_city TEXT NULL AFTER user_hybridauth_id";
+            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_city VARCHAR(128) AFTER user_hybridauth_id";
             $h->db->query($h->db->prepare($sql));
         }
          //phone
          if (!$h->db->column_exists('users', 'user_hybridauth_tel')) {
             // add new user_hybridauth_provider field
-            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_tel TEXT NULL AFTER user_hybridauth_id";
+            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_tel VARCHAR(128) AFTER user_hybridauth_id";
             $h->db->query($h->db->prepare($sql));
         }
         //gender
          if (!$h->db->column_exists('users', 'user_hybridauth_gender')) {
             // add new user_hybridauth_provider field
-            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_gender TEXT NULL AFTER user_hybridauth_id";
+            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_gender VARCHAR(10) AFTER user_hybridauth_id";
             $h->db->query($h->db->prepare($sql));
         }
         //birthyear
            if (!$h->db->column_exists('users', 'user_hybridauth_birthyear')) {
             // add new user_hybridauth_provider field
-            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_birthyear TEXT NULL AFTER user_hybridauth_id";
+            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_birthyear VARCHAR(50) AFTER user_hybridauth_id";
             $h->db->query($h->db->prepare($sql));
         }
         //birthmonth
              if (!$h->db->column_exists('users', 'user_hybridauth_birthmonth')) {
             // add new user_hybridauth_provider field
-            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_birthmonth TEXT NULL AFTER user_hybridauth_id";
+            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_birthmonth VARCHAR(50) AFTER user_hybridauth_id";
             $h->db->query($h->db->prepare($sql));
         }
         
            //zip
              if (!$h->db->column_exists('users', 'user_hybridauth_zip')) {
             // add new user_hybridauth_provider field
-            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_zip TEXT NULL AFTER user_hybridauth_id";
+            $sql = "ALTER TABLE " . TABLE_USERS . " ADD user_hybridauth_zip VARCHAR(50) AFTER user_hybridauth_id";
             $h->db->query($h->db->prepare($sql));
         }
         
@@ -252,6 +254,8 @@ class Hybridauth
      */
  public function theme_index_top($h)
 {
+
+
 	//A) if the user is logging in (already registered) - so page is login, and provider connection has been returned
        if ($h->cage->get->keyExists('connected_with')&& $h->pageName == 'login')  
     {   // load hybridauth base file
@@ -274,21 +278,21 @@ class Hybridauth
             $authenticate= new authentication();//create the data access object
       
             
-            $db= $authenticate->connectdb();
              #1 Check if user is already authenticated using the chosen provider (e.g. facebook)
              $authentication_info= $authenticate->find_by_provider_uid($h, $provider, $user_profile->identifier);
             
              # 2 - if authentication exists in the database, then we set the user as connected and redirect him to his profile page
                  if( $authentication_info ){
-                     
-                     $display_name  = $user_profile->displayName;
-                    $preferredname= str_replace (" ", "", $display_name); //check if there is a user by the name in db (could remove?)
-		if ($preferredname) {//if there is...
-                $login_result = $h->currentUser->loginCheck($h, $preferredname, ''); // no password necessary
+  
+					//get username 
+					$username= $authenticate->get_username_by_provider_uid($h, $user_profile->identifier);
+					
+		if ($username) {//if there is...
+                $login_result = $h->currentUser->loginCheck($h, $username, ''); // no password necessary
 				               // echo "<script>alert('$login_result')</script>";
 							   
 							     //success
-                $h->currentUser->name = $preferredname;
+                $h->currentUser->name = $username;
                 $remember = 1; // keep them logged in for 30 days (not optional)
                 require_once(PLUGINS . 'user_signin/user_signin.php');
                 $user_signin = new UserSignin();
@@ -321,6 +325,7 @@ class Hybridauth
 	 //if we are on the registration page, and connect with is in the url
     if ($h->cage->get->keyExists('connected_with')&& $h->pageName == 'register')  
     {   // load hybridauth base file
+		
 		require_once( "content/plugins/hybridauth/hybridauth/Hybrid/Auth.php" );
 	$hybridauth_config = './content/plugins/hybridauth/hybridauth/config.php';
 	
@@ -340,22 +345,22 @@ class Hybridauth
             $authenticate= new authentication();//create the data access object
       
             
-            //$db= $authenticate->connectdb();
              #1 Check if user is already authenticated using the chosen provider (e.g. facebook)
              $authentication_info= $authenticate->find_by_provider_uid($h, $provider, $user_profile->identifier);
             
              # 2 - if authentication exists in the database, then we set the user as connected and redirect him to his profile page
                   if( $authentication_info ){
                      
-                     $display_name  = $user_profile->displayName;
-                    $preferredname= str_replace (" ", "", $display_name); 
-		if ($preferredname) {
-                $login_result = $h->currentUser->loginCheck($h, $preferredname, ''); // no password necessary
+					 //get username 
+					$username= $authenticate->get_username_by_provider_uid($h, $user_profile->identifier);
+				
+		if ($username) {
+                $login_result = $h->currentUser->loginCheck($h, $username, ''); // no password necessary
 
             }
                      
                 //success
-                $h->currentUser->name = $preferredname;
+                $h->currentUser->name = $username;
                 $remember = 1; // keep them logged in for 30 days (not optional)
                 require_once(PLUGINS . 'user_signin/user_signin.php');
                 $user_signin = new UserSignin();
@@ -396,11 +401,40 @@ class Hybridauth
                         $birthyear     = $user_profile->birthYear;
                         $birthmonth    = $user_profile->birthMonth;
                         $zip           = $user_profile->zip;
-			$password      = ''; # for the password we generate something random
-
-                        $preferredname= str_replace (" ", "", $display_name); 
+					    $password      = ''; # for the password we generate something random
+						
+						//ask for the username
+			if ( $h->cage->get->keyExists('username'))
+			{				
+           $this->prefname = $h->cage->get->getAlnum('username'); // $_GET the provider key from url and set it to the constant
+           $preferredname=$this->prefname;}else{echo "<script>alert('error')</script>";}
+		   
+		   //username server side validity check (duplicate check)
+		  $duplicate = $authenticate->check_username($h, $preferredname);
+		  //check for invalid characters
+			if (preg_match('/[^a-z0-9.#$-]/i', $preferredname)) die ("Invalid characters found");
+		  
+		//if duplicate just die
+		if($duplicate)
+		{
+			die('Error: This username is taken.');
+		}
+		
+		
+		
+			//create new user base
+				require_once(BASEURL . 'libs/UserBase.php');
+                $user_base = new UserBase();
+				$permissions=$user_base->getDefaultPermissions($h, 'member');
+				// get user ip
+				$userip = $h->cage->server->testIp('REMOTE_ADDR');
+				
+				
+						
+						
 			// 4.1 - create new user
 			$new_user_id = $authenticate->createUser($h, 
+								$preferredname,
                                 $provider_uid,
                                 $provider,
                                 $first_name,
@@ -420,7 +454,11 @@ class Hybridauth
                                 $birthyear,
                                 $birthmonth,
                                 $zip,
-                                $password
+                                $password,
+								$preferredname,
+								$userip,
+								$permissions
+								
                                ); 
                         
                         // 4.3 - store the new user_id in session
@@ -430,16 +468,17 @@ class Hybridauth
 		  # 2 - if authentication exists in the database, then we set the user as connected and redirect him to his profile page
                   if( $authentication_info ){
                      
-                     $display_name  = $user_profile->displayName;
-                    $preferredname= str_replace (" ", "", $display_name); 
-		if ($preferredname) {
-                $login_result = $h->currentUser->loginCheck($h, $preferredname, ''); // no password necessary
+                  	 //get username 
+					$username= $authenticate->get_username_by_provider_uid($h, $user_profile->identifier);
+					
+		if ($username) {
+                $login_result = $h->currentUser->loginCheck($h, $username, ''); // no password necessary
 				               // echo "<script>alert('$login_result')</script>";
 
             }
                      
                 //success
-                $h->currentUser->name = $preferredname;
+                $h->currentUser->name = $username;
                 $remember = 1; // keep them logged in for 30 days (not optional)
                 require_once(PLUGINS . 'user_signin/user_signin.php');
                 $user_signin = new UserSignin();
@@ -522,6 +561,7 @@ class Hybridauth
                 $output .= "<p id='rpx_providers_desc'>Your account is associated with:</p>\n";
                 $output .= "<ul>\n";
 				$output .= "<li>&raquo " . $result->user_hybridauth_provider . "</li>";
+			
             } else {
                 $no_providers = true;
             }
